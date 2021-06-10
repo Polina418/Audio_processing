@@ -17,17 +17,6 @@ This program:
 You need to add your Google API key(json file) to the environmental variables in your system
 Example: GOOGLE_APPLICATION_CREDENTIALS = "your path"    
  
-TODO list:
-    1) filtering sound files DONE
-    
-    2) github repository
-    3) Upload scripts we have
-    4) Comment our codes, clean it
-    5) Shared file with TODO list
-    6) email to Larraitz about the possible tasks 11th DONE
-    
-    7) FLag, in case there are uncertainties about the speech onset DONE
-    
 """
 
 #cd Desktop/Python code/Audio_processing
