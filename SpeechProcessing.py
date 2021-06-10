@@ -5,15 +5,23 @@ Created on Mon Mar 1 09:53:28 2021
 @author: Polina Timofeeva
 
 This program:
-    1) Takes a .csv or a .xlsx file with base64 encoded strings of audio files 
-    2) Decodes the strings and saves them an .webm file
-    3) Converts the .webm files to .wav if don´t already exist
-        - Converts the audio to mono, if not already
-    4) Finds speech onset
+    1) Get the wav files
+    2) Filters the sounds
+    3) Finds speech onset
+    4) Recognizes speech
     5) Creates a .csv file with long format data for all participants for further analysis
-    6) Recognizes speech
-    7) Finds on and offset of speech
-    8) Creates a file with all that info saved in a long format
+
+Make sure your file has the following structure: 
+- Experimental folder
+    - Task1
+        - Participant1
+        - Participant2
+        - ...
+    - Task2
+        - Participant3
+        - Participant4
+        - ...
+    
 You need to add your Google API key(json file) to the environmental variables in your system
 Example: GOOGLE_APPLICATION_CREDENTIALS = "your path"    
  
@@ -191,7 +199,7 @@ def main():
         if num_cond-1 >=1:
             for cond in range(0, num_cond):
                 conditions.append(input('Type the name of your %d condition (should be specified in the name of your wav file)     '%(cond+1)))
-        
+        fmri = input('Is it (f)MRI data y/n    ')
         # conditions are the relevant conditions, skip the ones you don´t care about
         # Structure of your desired output file
         structure = ['Subject ID', 
@@ -202,10 +210,8 @@ def main():
                      'Response',
                      'Confidence']
         
-        language_1 = 'es_ES'
-        language_2 = 'eu_ES'
-        speech_recog = input('Do you want to use Speech Recognition? (yes/no)   ')
-        if speech_recog == 'no':
+        speech_recog = input('Do you want to use Speech Recognition? (y/n)   ')
+        if speech_recog == 'n':
             conf = 1
             word = 'OFF'
         
@@ -245,8 +251,11 @@ def main():
                     peaks, _ = find_peaks(nov, prominence=0.2, width=10)   
                     
                     # Speech recognition part with Google API speech to text  
-                    if speech_recog == 'yes':                
+                    if speech_recog == 'y':  
+                        language_1 = 'es_ES' # Here you can specify languages you want to use in your experiment
+                        language_2 = 'eu_ES' # Here you can specify languages you want to use in your experiment
                         word, conf = speech_to_text(file, language_1, language_2)
+                        
                     peaks = plot_trial(x_r, peaks, file, Fs, nov, pics_path)
                     
                     if len(peaks) > 1:
@@ -277,11 +286,12 @@ def main():
                                     except ValueError:
                                         start_time = txt
                                         print("This is not a valid number. Make sure to follow the order of the peaks with stars")
-                                
-    
                     else:
                         start_time = 'Empty'
                         sprec_reply = 'Empty'
+                    
+                    if fmri == 'y':
+                        start_time = peaks[0]/Fs
                         
                     if conf < 0.5:   
                         sprec_reply = input("Was it %s ? If no, type the word. If yes press Enter."%word)
