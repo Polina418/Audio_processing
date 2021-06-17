@@ -1,0 +1,147 @@
+# -*- coding: utf-8 -*-
+"""
+This sript takes a csv file, which contains the audios encoded in base64 strings
+and converts them into webm and wav files(you can choose one or have both)
+"""
+
+import base64
+import re
+from pandas import read_excel
+import pandas as pd
+import os
+import subprocess
+from glob import glob
+import io
+import time
+
+def make_xlsx(path, file_name):
+    """
+
+    Parameters
+    ----------
+    path : string
+        Path to your file.
+    file_name : string
+        The name of your file.
+
+    Returns
+    -------
+    dfs : TYPE
+        DESCRIPTION.
+        
+    """
+
+    df_new = pd.read_csv(path+f'{file_name}.csv')
+    dfr = pd.ExcelWriter(path+f'{file_name}.xlsx')
+    df_new.to_excel(dfr, index = False)
+    dfr.save()
+    dfs = read_excel(path+file_name+'.xlsx')
+    return dfs
+
+def create_webm_file(webm_file, audio_data):  
+    """
+
+    Parameters
+    ----------
+    webm_file : string
+        name of the .webm file that you want to convert to
+    audio_data : string
+        audio data in base64 format.
+
+    Returns
+    -------
+    None.
+
+    """
+    snd = open(webm_file,"wb")
+    # Decode the base64 encoded string and save it in a .webm file
+    decoded = base64.b64decode(audio_data+"====")
+    snd.write(decoded)
+    snd.close()
+
+    
+def make_wav_from_webm(new_path, webm_file, output_path):
+    """
+    
+    Parameters
+    ----------
+    new_path : string
+        Here, out the path to the .webm file that you want to convert to .wav
+    webm_file : string
+        The name of the .webm file
+    output_path : string
+        Path, where you want to save the new .wav file
+    
+    Returns
+    -------
+    None.
+    
+    """
+    
+    webm = new_path+webm_file
+    output = new_path+output_path
+    command = ['ffmpeg', '-i', f'{webm}','-ac','1', f'{output}']
+    # 15sec timeout in case it gets stuck
+    subprocess.call(command, timeout = 15, shell = True)  
+
+def main():
+    path = input('Write your full path containing your .csv files    ')
+    os.chdir(path)
+    tasks = []  
+    num_tasks = int(input('How many tasks are there?    '))
+    
+    for num in range(0, num_tasks):
+        tasks.append(input('Type the name of your %d task (should be specified in the name of your .csv file)     '%(num+1)))      
+    
+    for task in tasks:
+        file_names=list()
+        for name in glob( '**.csv' ):
+            if re.search(task,name):
+                file_names.append('/'+name[:-4])
+             
+        for file_name in file_names: 
+            i = 0
+            r = 0
+            # Check if the file is .xlsx already and if no, make a xlsx from csv
+            try:
+                dfs = read_excel(path+file_name+'.xlsx')
+            except FileNotFoundError:
+                # If doesn't exist, create it and read
+                dfs = make_xlsx(path,file_name)
+                pass
+    
+   
+            # Load the .xlsx file and create a pattern to match(here, any string with any alphabonumeric values is chosen)
+            pattern = re.compile("\w")
+    
+            for r in range (0,len(dfs)):  
+    
+                if pattern.match(dfs.audio_data[r]):
+    
+                    # Change to the new directory and create, if doesn´t already exist
+                    new_path = path + f'{file_name}/audios/'
+
+                    try:
+                        os.chdir(new_path)
+                    except FileNotFoundError:
+                        # Directory already exists
+                        os.makedirs(new_path)
+                        os.chdir(new_path)
+                        pass
+    
+                    webm_file = f'{i}_{dfs.Condition[r]}_{dfs.Image[r][:-4]}.webm'
+                    output_path = webm_file[:-4]+'wav'  
+                    try:
+                        io.open(output_path,"rb")
+                    except FileNotFoundError:
+                        create_webm_file(webm_file, dfs.audio_data[r])
+                        time.sleep(0.05)
+                        make_wav_from_webm(new_path, webm_file, output_path)
+                    try:
+                        os.remove(webm_file)
+                    except FileNotFoundError:
+                        pass 
+                    i += 1 
+
+if __name__=='__main__':
+    main()
