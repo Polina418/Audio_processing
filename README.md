@@ -47,6 +47,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
+        <li><a href="#description">Project Description</a></li>
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
@@ -81,9 +82,14 @@ Of course, no one software will serve all projects since your needs may be diffe
 
 A list of commonly used resources that I find helpful are listed in the acknowledgements.
 
+### Project Description
+
+
+
+
 ### Built With
 
-This section should list any major frameworks that you built your project using. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+In the project the following main frameworks were used:
 * [Python](https://https://www.python.org/)
 * [Spyder](https://www.spyder-ide.org/)
 
@@ -95,7 +101,6 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 Here is a list of Python libraries you´ll need to install in order to work with the software
-- subprocess 
 - librosa==0.8.0
 - pandas==1.0.3
 - numpy==1.17.5
@@ -104,11 +109,8 @@ Here is a list of Python libraries you´ll need to install in order to work with
 - playsound==1.2.2
 - google-cloud==0.34.0
 - google-cloud-speech==2.3.0
-- re
 - from io audioread==2.1.9, SpeechRecognition==3.8.1, wavio==0.0.4
 - jinja2-time==0.2.0
-- os
-- IPython
 - glob==0.7
 
 Example of installation on a Windows machine pip install 'PackageName==1.4'
@@ -166,11 +168,15 @@ Project Link: [https://github.com/Polina418/Audio_processing](https://github.com
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
 * [Img Shields](https://shields.io)
 * [Choose an Open Source License](https://choosealicense.com)
 * [GitHub Pages](https://pages.github.com)
 * [Template for README](https://github.com/othneildrew/Best-README-Template)
+* [numpy](https://numpy.org/)
+* [scipy](https://www.scipy.org/)
+* [librosa](https://librosa.org/doc/latest/index.html)
+* [Speech-to-Text API](https://cloud.google.com/speech-to-text)
+* [Novelty energy calculations](https://www.audiolabs-erlangen.de/resources/MIR/FMP/C6/C6S1_NoveltyEnergy.html)
 
 
 
@@ -186,6 +192,5 @@ Project Link: [https://github.com/Polina418/Audio_processing](https://github.com
 [issues-url]: https://github.com/Polina418/Audio_processing/issues
 [license-shield]: https://img.shields.io/github/license/Polina418/Audio_processing.svg?style=for-the-badge
 [license-url]: https://github.com/Polina418/Audio_processing/blob/main/LICENSE.txt
-
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/polina-timofeeva-70b996177
