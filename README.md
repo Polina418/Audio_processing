@@ -22,10 +22,10 @@ Script for audio processing - smoothing data, speech recognition
 <br />
 <p align="center">
   <a href="https://github.com/Polina418/Audio_processing">
-    <img src="/logo.png" alt="Logo" width="100" height="100">
+    <img src="/logo.png" alt="logo2" width="100" height="100">
   </a>
 
-  <h3 align="center">Speech processing tool (SPETOS)</h3>
+  <h3 align="center">Speech processing tool (SPONGE)</h3>
 
   <p align="center">
     An awesome README template to jumpstart your projects!
