@@ -120,9 +120,9 @@ It is a good practice to create a virtual environment and install all the packag
 ### Installation
 
 1. If you want to use Speech Recognition, you need to get an API key, save it in your projects' folder and add the path to the file to environmental variables on your computer.
-2. Clone the repository
+2. Clone the repository using git or manually
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/Polina418/Audio_processing/
    ```
 3. Create and activate your virtual envirenment 
    ```sh
