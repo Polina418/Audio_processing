@@ -81,6 +81,13 @@ Of course, no one software will serve all projects since your needs may be diffe
 
 A list of commonly used resources that I find helpful are listed in the acknowledgements.
 
+There are 2 scripts:
+ 1) csv_to_wav.py
+    This script contains code specifically for data collected from online experiments (in this case from cognition.run)
+    In these experiments, the data is saved in a .csv file. The .webm sound files are saved in a base64 encoded string. 
+    The script converts the data from a string to .wav for future processing.
+ 3) Audio_processing.py
+    This one takes a .wav file and finds speech onset, does speech recognition and saves all these data in a .csv file, ready for stats
 
 ### Built With
 
