@@ -133,14 +133,6 @@ It is a good practice to create a virtual environment and install all the packag
    ```
 
 
-<!-- USAGE EXAMPLES -->
-## Usage
-
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-
-
 <!-- ROADMAP -->
 ## Roadmap
 
@@ -161,19 +153,12 @@ Contributions are what make the open source community such an amazing place to b
 
 
 
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE` for more information.
-
-
-
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
+Timofeeva Polina - [@PolinaT74054073](https://twitter.com/PolinaT74054073) - timofeeva.polina.serg@gmail.com
 
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/Polina418/Audio_processing](https://github.com/Polina418/Audio_processing)
 
 
 
