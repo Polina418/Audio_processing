@@ -74,8 +74,6 @@ Script for audio processing - smoothing data, speech recognition
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![name][product-screenshot]](https://github.com/Polina418/Audio_processing/name.png)
-
 There are many great softwares to analyze your audio recordings from your participants, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a software that will help you deal with your data as fast and as accurate as possible. Why should you try this software?
 
 Here's why:
@@ -100,45 +98,45 @@ To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
 Here is a list of Python libraries you´ll need to install in order to work with the software
-- subprocess v.
-- librosa
-- pandas
-- numpy
-- scipy
-- matplotlib
-- playsound
-- google.cloud
+- subprocess 
+- librosa==0.8.0
+- pandas==1.0.3
+- numpy==1.17.5
+- scipy==1.3.3
+- matplotlib==3.1.3
+- playsound==1.2.2
+- google-cloud==0.34.0
+- google-cloud-speech==2.3.0
 - re
-- io
-- base64
-- time
+- from io audioread==2.1.9, SpeechRecognition==3.8.1, wavio==0.0.4
+- jinja2-time==0.2.0
 - os
 - IPython
+- glob==0.7
 
-pip install 'PackageName==1.4'
+Example of installation on a Windows machine pip install 'PackageName==1.4'
+It is a good practice to create a virtual environment and install all the packages needed for a particular project to avoid interference from other versions. Read more: https://docs.python.org/3/library/venv.html
 
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
+1. If you want to use Speech Recognition, you need to get an API key, save it in your projects' folder and add the path to the file to environmental variables on your computer.
+2. Clone the repository
    ```sh
    git clone https://github.com/your_username_/Project-Name.git
    ```
-3. Install NPM packages
+3. Create and activate your virtual envirenment 
    ```sh
-   npm install
+   python3 -m venv /path/to/new/virtual/environment
    ```
-4. Enter your API in `config.js`
-   ```JS
-   const API_KEY = 'ENTER YOUR API';
+4. Install python packages
+   ```sh
+   pip install ...
    ```
-
 
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
 
 _For more examples, please refer to the [Documentation](https://example.com)_
 
