@@ -5,7 +5,7 @@ Created on Mon Mar 1 09:53:28 2021
 @author: Polina Timofeeva
 
 This program:
-    1) Get the wav files
+    1) Gets the wav files
     2) Filters the sounds
     3) Finds speech onset
     4) Recognizes speech
@@ -50,10 +50,30 @@ from scipy import ndimage
 
 # Speech and offset detectio n with Google API
 def speech_to_text(audio_file_name, language_1, language_2):
+    """
+
+    Parameters
+    ----------
+    audio_file_name : string
+        This is the name of the file you want to process.
+    language_1 : string
+        What language is used in the audio?
+    language_2 : TYPE
+        If it is a dual language context, what is the second language?
+        The codes for specific languages can be found in https://cloud.google.com/speech-to-text/docs/languages
+
+    Returns
+    -------
+    word : string
+        The recognized word.
+    conf : int
+        Confidence with which the word was recognized.
+
+    """
+    word = "Not recognized" # Default values if the voice is not recognized
+    conf = 0
     try:
         r = sr.Recognizer()
-        word = "Not recognized" # Default values if the voice is not recognized
-        conf = 0
         with sr.AudioFile(audio_file_name) as source:
             r.adjust_for_ambient_noise(source, duration=0.5)
             audio = r.record(source)
@@ -63,33 +83,48 @@ def speech_to_text(audio_file_name, language_1, language_2):
             word = prediction["text"] 
             conf = prediction["confidence"]
         return word, conf
-    except:
-    
-        client = speech.SpeechClient()
-        word = "Not recognized" # Default values if the voice is not recognized
-        conf = 0
-        #start_time = ''
-        with io.open(audio_file_name,"rb") as source:
-            content = source.read()
-    
-        audio = speech.RecognitionAudio(content=content)  # read the entire audio file
-        config = speech.RecognitionConfig(
-                            language_code = language_1,
-                            alternative_language_codes = [language_2],
-                            enable_word_time_offsets = True,
-                            enable_word_confidence = True,
-                            model = 'command_and_search')
-        response = client.recognize(request={"config": config, "audio": audio})
-        for result in response.results:     
-            alternative = result.alternatives[0]
-            for word_info in alternative.words:        
-                word = word_info.word
-                conf = word_info.confidence
-                #start_time = word_info.start_time.total_seconds()
-                #end_time = word_info.end_time.total_seconds()
-        return word, conf
+    except: 
+        try:
+            client = speech.SpeechClient()
+            #start_time = ''
+            with io.open(audio_file_name,"rb") as source:
+                content = source.read()
+        
+            audio = speech.RecognitionAudio(content=content)  # read the entire audio file
+            config = speech.RecognitionConfig(
+                                language_code = language_1,
+                                alternative_language_codes = [language_2],
+                                enable_word_time_offsets = True,
+                                enable_word_confidence = True,
+                                model = 'command_and_search')
+            response = client.recognize(request={"config": config, "audio": audio})
+            for result in response.results:     
+                alternative = result.alternatives[0]
+                for word_info in alternative.words:        
+                    word = word_info.word
+                    conf = word_info.confidence                  
+            return word, conf
+        except:
+            print("Wasn't able to connect to Google services. Proceeding without Speech Recognition")
+            pass
 
 def make_xlsx(path, file_name):
+    """
+
+    Parameters
+    ----------
+    path : string
+        Path to your file.
+    file_name : string
+        The name of your file.
+
+    Returns
+    -------
+    dfs : TYPE
+        DESCRIPTION.
+        
+    """
+
     df_new = pd.read_csv(path+f'{file_name}.csv')
     dfr = pd.ExcelWriter(path+f'{file_name}.xlsx')
     df_new.to_excel(dfr, index = False)
@@ -97,7 +132,22 @@ def make_xlsx(path, file_name):
     dfs = read_excel(path+file_name+'.xlsx')
     return dfs
 
-def create_webm_file(webm_file, audio_data):   
+def create_webm_file(webm_file, audio_data):  
+    """
+
+    Parameters
+    ----------
+    webm_file : string
+        name of the .webm file that you want to convert to
+    audio_data : string
+        audio data in base64 format.
+
+    Returns
+    -------
+    None.
+
+    """
+    
     snd = open(webm_file,"wb")
     # Decode the base64 encoded string and save it in a .webm file
     decoded = base64.b64decode(audio_data+"====")
@@ -105,6 +155,23 @@ def create_webm_file(webm_file, audio_data):
     snd.close()
     
 def make_wav_from_webm(new_path, webm_file, output_path):
+    """
+
+    Parameters
+    ----------
+    new_path : string
+        Here, out the path to the .webm file that you want to convert to .wav
+    webm_file : string
+        The name of the .webm file
+    output_path : string
+        Path, where you want to save the new .wav file
+
+    Returns
+    -------
+    None.
+
+    """
+    
     webm = new_path+webm_file
     output = new_path+output_path
     command = ['ffmpeg', '-i', f'{webm}','-ac','1', f'{output}']
@@ -150,6 +217,32 @@ def compute_novelty_energy(x, Fs=1, N=2048, H=128, gamma=1000, norm=True):
 
 
 def plot_trial(x_r, peaks, f_name, Fs, nov, pics_path):
+    """
+
+    Parameters
+    ----------
+    x_r : numpy.ndarray
+        This is your filtered data
+    peaks : numpy.ndarray
+        These are the peaks of novelty function(speech onsets)
+    f_name : string
+        File name
+    Fs : int
+        Sampling frequency of your clean data.
+    nov : numpy.ndarray
+        Novelty curve.
+    pics_path : string
+        Path, where you want to save pictures produced by the code.
+        This is very useful to look at after the analysis is done in order to see,
+        if there are any issues and correct it manually. 
+        
+    Returns
+    -------
+    peaks : numpy.ndarray
+        updated peaks information.
+
+    """
+    
     dur = len(x_r)/Fs
     interval = dur/len(x_r)   
     tim = np.arange(0,dur,interval)
@@ -180,14 +273,10 @@ def plot_trial(x_r, peaks, f_name, Fs, nov, pics_path):
     plt.savefig(pics_path+f_name[:-4])
     plt.show()
     return peaks
-    
-    return peaks
-
 
 def main():
         # Change to your current working directory
-        path = 'E:/Desktop/Switch_beh/Results/SwitchVO/'
-        #path = input('Write your full path containing your .wav files    ')
+        path = input('Write your full path containing your .wav files    ')
         os.chdir(path)
         tasks = []
         conditions = []
@@ -200,7 +289,6 @@ def main():
             for cond in range(0, num_cond):
                 conditions.append(input('Type the name of your %d condition (should be specified in the name of your wav file)     '%(cond+1)))
         fmri = input('Is it (f)MRI data y/n    ')
-        # conditions are the relevant conditions, skip the ones you don´t care about
         # Structure of your desired output file
         structure = ['Subject ID', 
                      'Task',
@@ -239,7 +327,6 @@ def main():
                     elif num_cond == 0:    
                         file_names.append(file) 
                 # Change to the new directory and create, if doesn´t already exist
-
                 
                 for file in file_names:    
                     x, Fs = librosa.load(file)
