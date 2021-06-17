@@ -74,7 +74,7 @@ Script for audio processing - smoothing data, speech recognition
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![name][product-screenshot]](https://example.com)
+[![name][product-screenshot]](https://github.com/Polina418/Audio_processing/name.png)
 
 There are many great softwares to analyze your audio recordings from your participants, however, I didn't find one that really suit my needs so I created this enhanced one. I want to create a software that will help you deal with your data as fast and as accurate as possible. Why should you try this software?
 
