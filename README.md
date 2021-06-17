@@ -186,5 +186,6 @@ Project Link: [https://github.com/Polina418/Audio_processing](https://github.com
 [issues-url]: https://github.com/Polina418/Audio_processing/issues
 [license-shield]: https://img.shields.io/github/license/Polina418/Audio_processing.svg?style=for-the-badge
 [license-url]: https://github.com/Polina418/Audio_processing/blob/main/LICENSE.txt
+
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/polina-timofeeva-70b996177
