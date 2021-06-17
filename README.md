@@ -22,22 +22,22 @@ Script for audio processing - smoothing data, speech recognition
 <br />
 <p align="center">
   <a href="https://github.com/Polina418/Audio_processing">
-    <img src="/logo.png" alt="Logo" width="80" height="80">
+    <img src="/logo.png" alt="Logo" width="100" height="100">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Speech processing tool (SPETOS)</h3>
 
   <p align="center">
     An awesome README template to jumpstart your projects!
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/Polina418/Audio_processing"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    <a href="https://github.com/Polina418/Audio_processing">View Demo</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
+    <a href="https://github.com/Polina418/Audio_processing/issues">Report Bug</a>
     ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
+    <a href="https://github.com/Polina418/Audio_processing/issues">Request Feature</a>
   </p>
 </p>
 
@@ -99,24 +99,24 @@ This section should list any major frameworks that you built your project using.
 To get a local copy up and running follow these simple example steps.
 
 ### Prerequisites
+Here is a list of Python libraries you´ll need to install in order to work with the software
+- subprocess v.
+- librosa
+- pandas
+- numpy
+- scipy
+- matplotlib
+- playsound
+- google.cloud
+- re
+- io
+- base64
+- time
+- os
+- IPython
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+pip install 'PackageName==1.4'
+
 ### Installation
 
 1. Get a free API Key at [https://example.com](https://example.com)
