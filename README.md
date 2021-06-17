@@ -47,7 +47,6 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#description">Project Description</a></li>
         <li><a href="#built-with">Built With</a></li>
       </ul>
     </li>
@@ -82,10 +81,6 @@ Of course, no one software will serve all projects since your needs may be diffe
 
 A list of commonly used resources that I find helpful are listed in the acknowledgements.
 
-### Project Description
-
-
-
 
 ### Built With
 
@@ -98,6 +93,8 @@ In the project the following main frameworks were used:
 ## Getting Started
 
 To get a local copy up and running follow these simple example steps.
+Before starting, organize your folder according to these guidlines:
+Make a folder for your project
 
 ### Prerequisites
 Here is a list of Python libraries you´ll need to install in order to work with the software
