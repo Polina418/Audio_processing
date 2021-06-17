@@ -1,6 +1,4 @@
 # Audio_processing
-Script for audio processing - smoothing data, speech recognition
-
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
@@ -28,7 +26,8 @@ Script for audio processing - smoothing data, speech recognition
   <h3 align="center">Speech processing tool (SPONGE)</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    Script for audio processing - smoothing data, speech recognition, speech onset detection.
+    This script might not work for you if you need to further extract any lingustic futures! Be careful.
     <br />
     <a href="https://github.com/Polina418/Audio_processing"><strong>Explore the docs »</strong></a>
     <br />
