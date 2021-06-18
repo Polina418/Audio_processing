@@ -140,12 +140,10 @@ It is a good practice to create a virtual environment and install all the packag
 <!-- Usage -->
 ## Usage
 
-<br />
-<p align="center">
-  <a href="https://github.com/Polina418/Audio_processing">
-    <iframe src="/Usage csv to wav.mp4" width="500" height="500">
-  </a>
-</p>
+This is an example of use of "csv to wav" script
+
+<iframe src="https://github.com/Polina418/Audio_processing/Usage csv to wav.mp4" width="500" height="500">
+</iframe>
 
 
 <!-- ROADMAP -->
