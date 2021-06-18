@@ -30,7 +30,7 @@
     <a href="https://github.com/Polina418/Audio_processing"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/Polina418/Audio_processing">View Demo</a>
+    <a href="https://github.com/Polina418/Audio_processing/blob/main/Usage_sponge.md">View Demo</a>
     ·
     <a href="https://github.com/Polina418/Audio_processing/issues">Report Bug</a>
     ·
