@@ -140,9 +140,9 @@ It is a good practice to create a virtual environment and install all the packag
 <!-- Usage -->
 ## Usage
 
-See the [Usage](https://github.com/Polina418/Audio_processing/blob/main/Usage_csv_to_wav.md) for examples
+See the [Usage csv_to_wav](https://github.com/Polina418/Audio_processing/blob/main/Usage_csv_to_wav.md) for examples
 
-See the [Usage](https://github.com/Polina418/Audio_processing/blob/main/Usage_sponge.md) for examples
+See the [Usage sponge](https://github.com/Polina418/Audio_processing/blob/main/Usage_sponge.md) for examples
 
 
 
