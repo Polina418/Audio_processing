@@ -260,9 +260,9 @@ def main():
                 
                 for file in file_names:    
                     x, Fs = librosa.load(file)
-                    x_s = savgol_filter(x, 51, 3)
+                    x_s = savgol_filter(x, 51, 4)
                     sif = int(len(x)/1000)
-                    x_r = ndimage.median_filter(x_s, size=50)
+                    x_r = ndimage.median_filter(x_s, size=sif)
                     nov, Fs_nov = compute_novelty_energy(x_r, Fs)
                     nov = sps.resample(nov, len(x_r))
                     peaks, _ = find_peaks(nov, prominence=0.2, width=10)   
@@ -327,7 +327,6 @@ def main():
                                 'Confidence': conf}
                     
                     dataf = dataf.append(new_row,ignore_index=True)
-                    print('Finished', file, 'out of 336')
                     get_ipython().magic('clear')
                     i += 1 
                 try:            
