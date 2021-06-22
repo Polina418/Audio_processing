@@ -261,12 +261,19 @@ def main():
                 
                 for file in file_names:    
                     x, Fs = librosa.load(file)
-                    x_s = savgol_filter(x, 51, 4)
-                    sif = int(len(x)/1000)
-                    x_r = ndimage.median_filter(x_s, size=sif)
-                    nov, Fs_nov = compute_novelty_energy(x_r, Fs)
-                    nov = sps.resample(nov, len(x_r))
-                    peaks, _ = find_peaks(nov, prominence=0.2, width=10)   
+                    x_s = ndimage.median_filter(x, 11)
+                    x_r = savgol_filter(x_s, 11, 4)
+                    nov, Fs_nov = compute_novelty_energy(x_r)
+                    nov = sps.resample(nov,len(x_r))
+                    peaks, _ = find_peaks(nov, prominence=0.4, width=10)
+                    
+                    # If the part above doesn´t do too well, try this!
+                    #x_s = savgol_filter(x, 51, 4)
+                    #sif = int(len(x)/1000)
+                    #x_r = ndimage.median_filter(x_s, size=sif)
+                    #nov, Fs_nov = compute_novelty_energy(x_r, Fs)
+                    #nov = sps.resample(nov, len(x_r))
+                    #peaks, _ = find_peaks(nov, prominence=0.2, width=10)   
                     
                     # Speech recognition part with Google API speech to text  
                     if speech_recog == 'y':  
