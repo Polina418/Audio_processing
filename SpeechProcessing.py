@@ -109,7 +109,7 @@ def speech_to_text(audio_file_name, language_1, language_2):
             print("Wasn't able to connect to Google services. Proceeding without Speech Recognition")
             pass
 
-def compute_novelty_energy(x, Fs=1, N=2048, H=128, gamma=1000, norm=True):
+def compute_novelty_energy(x, Fs=1, N=4096, H=256, gamma=1000, norm=True):
     """Compute energy-based novelty function
 
     Notebook: C6/C6S1_NoveltyEnergy.ipynb
