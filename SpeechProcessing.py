@@ -45,7 +45,8 @@ from google.cloud import speech_v1p1beta1 as speech
 from scipy.signal import savgol_filter
 import speech_recognition as sr
 from scipy import ndimage
-
+from numba import jit
+@jit(nopython=True)
 #%matplotlib inline
 
 # Speech and offset detectio n with Google API
