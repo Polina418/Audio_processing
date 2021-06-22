@@ -261,8 +261,8 @@ def main():
                 
                 for file in file_names:    
                     x, Fs = librosa.load(file)
-                    x_s = ndimage.median_filter(x, 11)
-                    x_r = savgol_filter(x_s, 11, 4)
+                    x_s = ndimage.median_filter(x, 51)
+                    x_r = savgol_filter(x_s, 21, 4)
                     nov, Fs_nov = compute_novelty_energy(x_r)
                     nov = sps.resample(nov,len(x_r))
                     peaks, _ = find_peaks(nov, prominence=0.4, width=10)
