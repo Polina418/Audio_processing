@@ -310,7 +310,7 @@ def main():
                                         start_time = peaks[int(txt)-1]/Fs
                                     except ValueError:
                                         start_time = txt
-                                        print("This is not a valid number. Make sure to follow the order of the peaks with stars")
+                                        print("Writing ", txt, " as the onset time")
                     else:
                         start_time = 'Empty'
                         sprec_reply = 'Empty'
