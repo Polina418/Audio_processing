@@ -265,7 +265,7 @@ def main():
                     x_r = savgol_filter(x_s, 21, 4)
                     nov, Fs_nov = compute_novelty_energy(x_r)
                     nov = sps.resample(nov,len(x_r))
-                    peaks, _ = find_peaks(nov, prominence=0.4, width=10)
+                    peaks, _ = find_peaks(nov, prominence=0.2, width=10)
                     
                     # If the part above doesn´t do too well, try this!
                     #x_s = savgol_filter(x, 51, 4)
@@ -283,41 +283,41 @@ def main():
                         
                     peaks = plot_trial(x_r, peaks, file, Fs, nov, pics_path)
                     
-                    if len(peaks) > 1:
-                        playsound(f'{file}')
-                        txt = input("Which one of the onsets is the correct one? Enter a number eg. 1. If the starting point is not there, enter - ")                              
-                        if txt == '-':
-                            start_time = 'Check the file'
-                        else:
-                            try:
-                                print("Writing ", peaks[int(txt)-1]/Fs, " as the onset time")
-                                start_time = peaks[int(txt)-1]/Fs
-                            except ValueError:
-                                start_time = txt
-                                print("This is not a valid number. Make sure to follow the order of the peaks with stars")
-                        plt.close()
-                        
-                    elif len(peaks) == 1:
-                        playsound(f'{file}')
-                        start_time = peaks[0]/Fs
-                        if start_time > (len(x_r)/Fs-0.3):
-                                txt = input("Which one of the onsets is the correct one? Enter a number eg. 1. If the starting point is not there, enter - ")                              
-                                if txt == '-':
-                                    start_time = 'Check the file'
-                                else:
-                                    try:
-                                        print("Writing ", peaks[int(txt)-1]/Fs, " as the onset time")
-                                        start_time = peaks[int(txt)-1]/Fs
-                                    except ValueError:
-                                        start_time = txt
-                                        print("Writing ", txt, " as the onset time")
-                    else:
-                        start_time = 'Empty'
-                        sprec_reply = 'Empty'
-                    
                     if fmri == 'y':
                         start_time = peaks[0]/Fs
-                        
+                    else:     
+                        if len(peaks) > 1:
+                            playsound(f'{file}')
+                            txt = input("Which one of the onsets is the correct one? Enter a number eg. 1. If the starting point is not there, enter - ")                              
+                            if txt == '-':
+                                start_time = 'Check the file'
+                            else:
+                                try:
+                                    print("Writing ", peaks[int(txt)-1]/Fs, " as the onset time")
+                                    start_time = peaks[int(txt)-1]/Fs
+                                except ValueError:
+                                    start_time = txt
+                                    print(("Writing ", txt, " as the onset time"))
+                            plt.close()
+
+                        elif len(peaks) == 1:
+                            playsound(f'{file}')
+                            start_time = peaks[0]/Fs
+                            if start_time > (len(x_r)/Fs-0.3):
+                                    txt = input("Which one of the onsets is the correct one? Enter a number eg. 1. If the starting point is not there, enter - ")                              
+                                    if txt == '-':
+                                        start_time = 'Check the file'
+                                    else:
+                                        try:
+                                            print("Writing ", peaks[int(txt)-1]/Fs, " as the onset time")
+                                            start_time = peaks[int(txt)-1]/Fs
+                                        except ValueError:
+                                            start_time = txt
+                                            print("Writing ", txt, " as the onset time")
+                        else:
+                            start_time = 'Empty'
+                            sprec_reply = 'Empty'
+                    
                     if conf < 0.5:   
                         sprec_reply = input("Was it %s ? If no, type the word. If yes press Enter."%word)
                         if sprec_reply == '':
