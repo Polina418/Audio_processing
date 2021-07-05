@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 """
@@ -30,10 +31,9 @@ Example: GOOGLE_APPLICATION_CREDENTIALS = "your path"
 #cd Desktop/Python code/Audio_processing
 #.\env\Scripts\activate
 
-import os, base64, re, io, subprocess, librosa
+import os, re, io, librosa
 from glob import glob
 from IPython import get_ipython
-from pandas import read_excel
 import pandas as pd
 import numpy as np
 from scipy import signal
@@ -147,7 +147,7 @@ def compute_novelty_energy(x, Fs=1, N=4096, H=256, gamma=1000, norm=True):
     return novelty_energy, Fs_feature
 
 
-def plot_trial(x_r, peaks, f_name, Fs, nov, pics_path):
+def plot_trial(x_r, peaks, f_name, Fs, nov, pics_path, times):
     """
 
     Parameters
@@ -177,44 +177,52 @@ def plot_trial(x_r, peaks, f_name, Fs, nov, pics_path):
     dur = len(x_r)/Fs
     interval = dur/len(x_r)   
     tim = np.arange(0,dur,interval)
-    peaks1 = peaks*interval
-
-    for x, y in zip(peaks1[0::], peaks1[1::]):
-        ind1 = np.where(peaks1==x);
-        ind2 = np.where(peaks1==y);
-        if x < 0.55:
-            peaks1 = np.delete(peaks1, ind1)
-            peaks = np.delete(peaks, ind1)
-        if len(peaks1)>1 and y-x < 0.35:
-            peaks1 = np.delete(peaks1, ind2)
-            peaks = np.delete(peaks, ind2)
-
-    peaks = peaks[0:1]
-    peaks1 = peaks1[0:1]
-    labels = list(range(1,len(peaks)+1))
+    peaks1 = np.array(peaks*interval)
+    times1 = np.array(times*interval)
+            
+    if len(peaks1) == 1:
+        pass
+    else:        
+        p = np.array([])
+    
+        for pr, fo in zip(peaks1[0::], peaks1[1::]):
+            ind1 = np.where(peaks1==pr);
+            ind2 = np.where(peaks1==fo);
+            if pr < 0.45:
+                peaks1 = np.delete(peaks1, ind1)
+            if len(peaks1)>1 and fo-pr < 0.2:
+                peaks1 = np.delete(peaks1, ind2)
+            for el in times1:
+                if pr < el and fo > el and pr not in p:
+                    p = np.append(p, pr)  
+                    peaks1 = p  
+        if peaks1.size == 0 :
+            peaks1 = np.array(peaks[-1]*interval)
+                    
+       
+    labels = list(range(1,len(peaks1)+1))
     fig = plt.gcf()
     fig.canvas.set_window_title(f'{f_name}')
     plt.plot(tim[:len(x_r)], x_r)
     #plt.plot(tim[:len(nov)], nov)
     for j,label in enumerate(labels):
-        plt.text(peaks1[j], 0, label, fontsize=10, bbox=dict(facecolor='white', alpha=0.5))
+        plt.text(peaks1[j], 0, label, fontsize=10, bbox=dict(facecolor='white', alpha=0.1))
         plt.axvline(x=peaks1[j], label=f'Onset time {label} = {round(peaks1[j],3)}', c='r', ls='--')
-    plt.legend(loc='upper right')
+        plt.legend(loc='upper right')
     plt.pause(1)
     plt.savefig(pics_path+f_name[:-4])
     plt.show()
-    return peaks
+    return peaks1
 
 def main():
         # Change to your current working directory
-        path = input('Write your full path containing your .wav files    ')
+        path = input('Write the full path to your experimental folder   ')
         os.chdir(path)
         tasks = []
         conditions = []
         num_tasks = int(input('How many tasks are there?    '))
         for num in range(0, num_tasks):
             tasks.append(input('Type the name of your %d task (should be specified in the name of your wav file)     '%(num+1)))
-        res_audios = input('What is the extension of your audios?(e.x. wav)    ')
         num_cond = int(input('How many conditions there are?    '))
         if num_cond-1 >=1:
             for cond in range(0, num_cond):
@@ -230,13 +238,10 @@ def main():
                      'Confidence']
         
         speech_recog = input('Do you want to use Speech Recognition? (y/n)   ')
-        if speech_recog == 'n':
-            conf = 1
-            word = 'OFF'
         
         for task in tasks:  
             subjects = list()
-            os.chdir(path+task)
+            os.chdir(path+'/'+task)
             for name in glob('*/' ):
                 subjects.append(name[:-1]) 
                     
@@ -244,15 +249,15 @@ def main():
                 print('Processing subject ', subject)
                 i = 0
                 file_names = list()
-                os.chdir(path+task+f'/{subject}/')
+                os.chdir(path+'/'+task+'/'+f'/{subject}/')
                 dataf = pd.DataFrame(columns = structure, dtype='str')
-                pics_path = path + f'{task}/{subject}/plots/'
+                pics_path = path + f'/{task}/{subject}/plots/'
                 try:
                     os.makedirs(pics_path)
                 except:
                     pass
 
-                for file in glob( f'**.{res_audios}' ):
+                for file in glob( '**.wav' ):
                     if re.search(task.lower(),file.lower()):
                         file_names.append(file) 
                     elif num_cond == 0:    
@@ -265,8 +270,7 @@ def main():
                     x_r = savgol_filter(x_s, 21, 4)
                     nov, Fs_nov = compute_novelty_energy(x_r)
                     nov = sps.resample(nov,len(x_r))
-                    peaks, _ = find_peaks(nov, prominence=0.2, width=10)
-                    
+
                     # If the part above doesn´t do too well, try this!
                     #x_s = savgol_filter(x, 51, 4)
                     #sif = int(len(x)/1000)
@@ -280,44 +284,53 @@ def main():
                         language_1 = 'es_ES' # Here you can specify languages you want to use in your experiment
                         language_2 = 'eu_ES' # Here you can specify languages you want to use in your experiment
                         word, conf = speech_to_text(file, language_1, language_2)
+                    else:
+                        conf = 1
+                        word = 'OFF'   
                         
-                    peaks = plot_trial(x_r, peaks, file, Fs, nov, pics_path)
-                    
                     if fmri == 'y':
-                        start_time = peaks[0]/Fs
-                    else:     
-                        if len(peaks) > 1:
-                            playsound(f'{file}')
-                            txt = input("Which one of the onsets is the correct one? Enter a number eg. 1. If the starting point is not there, enter - ")                              
-                            if txt == '-':
-                                start_time = 'Check the file'
-                            else:
-                                try:
-                                    print("Writing ", peaks[int(txt)-1]/Fs, " as the onset time")
-                                    start_time = peaks[int(txt)-1]/Fs
-                                except ValueError:
-                                    start_time = txt
-                                    print(("Writing ", txt, " as the onset time"))
-                            plt.close()
+                        peaks, _ = find_peaks(nov, prominence=0.4, width=10)   
+                        peaks = peaks[:1]
+                        start_time = plot_trial(x, peaks, file, Fs, nov, pics_path, peaks)
 
-                        elif len(peaks) == 1:
-                            playsound(f'{file}')
-                            start_time = peaks[0]/Fs
-                            if start_time > (len(x_r)/Fs-0.3):
-                                    txt = input("Which one of the onsets is the correct one? Enter a number eg. 1. If the starting point is not there, enter - ")                              
-                                    if txt == '-':
-                                        start_time = 'Check the file'
-                                    else:
-                                        try:
-                                            print("Writing ", peaks[int(txt)-1]/Fs, " as the onset time")
-                                            start_time = peaks[int(txt)-1]/Fs
-                                        except ValueError:
-                                            start_time = txt
-                                            print("Writing ", txt, " as the onset time")
+                    else:   
+                        peaks, _ = find_peaks(nov, prominence=0.2, width=10)   
+                        f, t, Sxx = signal.spectrogram(x_r)
+                        time_min_freq = np.sort(np.argmax(Sxx, axis=1))
+                        times = []
+                        times = np.append(times,t[time_min_freq[0]])
+                        for pr, fo in zip(time_min_freq[0::], time_min_freq[1::]):    
+                            if (fo-pr)>4:
+                                times = np.append(times,t[fo])
+                        start_time = plot_trial(x, peaks, file, Fs, nov, pics_path, times)
+                               
+                    if len(peaks) > 1:
+                        playsound(f'{file}')
+                        txt = input("Which one of the onsets is the correct one? Enter a number eg. 1. If the starting point is not there, enter - ")                              
+                        if txt == '-':
+                            start_time = 'Check the file'
                         else:
-                            start_time = 'Empty'
-                            sprec_reply = 'Empty'
-                    
+                            try:
+                                print("Writing ", peaks[int(txt)-1]/Fs, " as the onset time")
+                                start_time = peaks[int(txt)-1]/Fs
+                            except ValueError:
+                                start_time = txt
+                                print(("Writing ", txt, " as the onset time"))                       
+
+                    elif len(peaks) == 1:
+                        playsound(f'{file}')
+                        start_time = peaks[0]/Fs
+                        if start_time > (len(x_r)/Fs-0.5):
+                            txt = input("Is this the correct onset? If yes press Enter, if no write the correct onset     ")                              
+                            if txt == '':
+                                pass
+                            else:
+                                start_time = txt
+                                print("Writing ", txt, " as the onset time")
+                                
+                    if np.amax(x)<0.01:
+                        start_time = 'Noisy'    
+                        
                     if conf < 0.5:   
                         sprec_reply = input("Was it %s ? If no, type the word. If yes press Enter."%word)
                         if sprec_reply == '':
@@ -334,18 +347,17 @@ def main():
                                 'Response': word,
                                 'Confidence': conf}
                     
-                    dataf = dataf.append(new_row,ignore_index=True)
+                    dataf = dataf.append(new_row, ignore_index=True)
                     get_ipython().magic('clear')
                     i += 1 
                 try:            
                     result_file = path+f'/{task}/{subject}/{task}_result_{subject}.csv'
                     dataf.to_csv(result_file, index = False, header=True)   
                 except PermissionError:
-                    result_file = path+f'/{task}/{subject}/{task}_result_{subject}_1.csv'
+                    result_file = path+f'/{task}/{subject}/{task}_result_{subject}_.csv'
                     dataf.to_csv(result_file, index = False, header=True)
 
                 
 if __name__=='__main__':
     main()
     
- 
