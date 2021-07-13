@@ -304,22 +304,22 @@ def main():
                                 times = np.append(times,t[fo])
                         start_time = plot_trial(x, peaks, file, Fs, nov, pics_path, times)
                                
-                    if len(peaks) > 1:
+                    if len(start_time) > 1:
                         playsound(f'{file}')
                         txt = input("Which one of the onsets is the correct one? Enter a number eg. 1. If the starting point is not there, enter - ")                              
                         if txt == '-':
                             start_time = 'Check the file'
                         else:
                             try:
-                                print("Writing ", peaks[int(txt)-1]/Fs, " as the onset time")
-                                start_time = peaks[int(txt)-1]/Fs
+                                print("Writing ", start_time[int(txt)-1], " as the onset time")
+                                start_time = start_time[int(txt)-1]
                             except ValueError:
                                 start_time = txt
                                 print(("Writing ", txt, " as the onset time"))                       
 
-                    elif len(peaks) == 1:
+                    elif len(start_time) == 1:
                         playsound(f'{file}')
-                        start_time = peaks[0]/Fs
+                        start_time = start_time[0]
                         if start_time > (len(x_r)/Fs-0.5):
                             txt = input("Is this the correct onset? If yes press Enter, if no write the correct onset     ")                              
                             if txt == '':
