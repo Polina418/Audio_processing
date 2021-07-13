@@ -147,7 +147,7 @@ def compute_novelty_energy(x, Fs=1, N=4096, H=256, gamma=1000, norm=True):
     return novelty_energy, Fs_feature
 
 
-def plot_trial(x_r, peaks, f_name, Fs, nov, pics_path, times):
+def plot_trial(x_r, peaks, f_name, Fs, nov, pics_path, times, fmri='n'):
     """
 
     Parameters
@@ -199,7 +199,8 @@ def plot_trial(x_r, peaks, f_name, Fs, nov, pics_path, times):
         if peaks1.size == 0 :
             peaks1 = np.array(peaks[-1]*interval)
                     
-       
+    if fmri == 'y':
+        peaks1 = peaks1[:1]   
     labels = list(range(1,len(peaks1)+1))
     fig = plt.gcf()
     fig.canvas.set_window_title(f'{f_name}')
@@ -266,10 +267,6 @@ def main():
                 
                 for file in file_names:    
                     x, Fs = librosa.load(file)
-                    x_s = ndimage.median_filter(x, 51)
-                    x_r = savgol_filter(x_s, 21, 4)
-                    nov, Fs_nov = compute_novelty_energy(x_r)
-                    nov = sps.resample(nov,len(x_r))
 
                     # If the part above doesn´t do too well, try this!
                     #x_s = savgol_filter(x, 51, 4)
@@ -289,20 +286,25 @@ def main():
                         word = 'OFF'   
                         
                     if fmri == 'y':
+                        x_s = ndimage.median_filter(x, 51)
+                        x_r = savgol_filter(x_s, 21, 4)
+                        nov, Fs_nov = compute_novelty_energy(x_r)
+                        nov = sps.resample(nov,len(x_r))
                         peaks, _ = find_peaks(nov, prominence=0.4, width=10)   
-                        peaks = peaks[:1]
-                        start_time = plot_trial(x, peaks, file, Fs, nov, pics_path, peaks)
+                        start_time = plot_trial(x, peaks[:1], file, Fs, nov, pics_path, peaks, fmri)
 
                     else:   
+                        nov, Fs_nov = compute_novelty_energy(x)
+                        nov = sps.resample(nov,len(x))
                         peaks, _ = find_peaks(nov, prominence=0.2, width=10)   
-                        f, t, Sxx = signal.spectrogram(x_r)
+                        f, t, Sxx = signal.spectrogram(x)
                         time_min_freq = np.sort(np.argmax(Sxx, axis=1))
                         times = []
                         times = np.append(times,t[time_min_freq[0]])
                         for pr, fo in zip(time_min_freq[0::], time_min_freq[1::]):    
                             if (fo-pr)>4:
                                 times = np.append(times,t[fo])
-                        start_time = plot_trial(x, peaks, file, Fs, nov, pics_path, times)
+                        start_time = plot_trial(x, peaks, file, Fs, nov, pics_path, times, fmri)
                                
                     if len(start_time) > 1:
                         playsound(f'{file}')
